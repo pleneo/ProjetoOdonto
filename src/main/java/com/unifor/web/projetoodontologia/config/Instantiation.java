@@ -1,25 +1,13 @@
 package com.unifor.web.projetoodontologia.config;
 
+import com.unifor.web.projetoodontologia.entities.*;
+import com.unifor.web.projetoodontologia.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.Instant;
 import java.util.Arrays;
-
-import com.unifor.web.projetoodontologia.entities.Aluno;
-import com.unifor.web.projetoodontologia.entities.Atendimento;
-import com.unifor.web.projetoodontologia.entities.Disciplina;
-import com.unifor.web.projetoodontologia.entities.Feedback;
-import com.unifor.web.projetoodontologia.entities.Paciente;
-import com.unifor.web.projetoodontologia.entities.Professor;
-
-import com.unifor.web.projetoodontologia.repositories.AlunoRepository;
-import com.unifor.web.projetoodontologia.repositories.AtendimentoRepository;
-import com.unifor.web.projetoodontologia.repositories.DisciplinaRepository;
-import com.unifor.web.projetoodontologia.repositories.FeedbackRepository;
-import com.unifor.web.projetoodontologia.repositories.PacienteRepository;
-import com.unifor.web.projetoodontologia.repositories.ProfessorRepository;
 
 
 @Configuration
@@ -43,6 +31,9 @@ public class Instantiation implements CommandLineRunner {
     @Autowired
     private ProfessorRepository professorRepository;
 
+    @Autowired
+    private RespostaRepository respostaRepository;
+
     @Override
     public void run(String... args) throws Exception {
         alunoRepository.deleteAll();
@@ -51,6 +42,7 @@ public class Instantiation implements CommandLineRunner {
         feedbackRepository.deleteAll();
         pacienteRepository.deleteAll();
         professorRepository.deleteAll();
+        respostaRepository.deleteAll();
 
         // Instanciando Alunos
         Aluno a1 = new Aluno(null, 123, 1, "João Silva");
@@ -112,11 +104,13 @@ public class Instantiation implements CommandLineRunner {
         d2.getProfessores().add(p2);
 
 
+        // Instanciando Resposta
+        Resposta r1 = new Resposta(null, "a", "b", "c");
 
 
 
 
-
+        respostaRepository.saveAll(Arrays.asList(r1));
         feedbackRepository.saveAll(Arrays.asList(f1, f2));
         pacienteRepository.saveAll(Arrays.asList(pac1, pac2));
         disciplinaRepository.saveAll(Arrays.asList(d1, d2));

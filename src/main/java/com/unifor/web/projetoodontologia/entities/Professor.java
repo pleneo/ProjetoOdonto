@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "professores")
 public class Professor implements Serializable {
@@ -48,4 +49,16 @@ public class Professor implements Serializable {
     public List<Disciplina> getDisciplinas() { return disciplinas; }
     public void setDisciplinas(List<Disciplina> disciplinas) { this.disciplinas = disciplinas; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Professor professor = (Professor) o;
+        return Objects.equals(id, professor.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

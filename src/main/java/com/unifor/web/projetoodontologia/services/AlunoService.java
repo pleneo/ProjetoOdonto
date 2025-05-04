@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class AlunoService {
-
+    //TODO tratamento de erros de buscas melhor feito.
     @Autowired
     private AlunoRepository alunoRepository;
 
