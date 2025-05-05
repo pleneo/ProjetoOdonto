@@ -14,8 +14,9 @@ document.querySelectorAll('.next-btn').forEach(button => {
             return;
         }
 
-        // Salva a resposta no objeto
-        respostas[currentQuestionId.replace('question-', 'r')] = selectedOption.value;
+        // Salva a resposta no objeto - corrigido para usar r1, r2, r3 consistentemente
+        const questionNumber = currentQuestionId.replace('question-', '');
+        respostas[`r${questionNumber}`] = selectedOption.value;
 
         // Oculta a pergunta atual e mostra a próxima
         document.getElementById(currentQuestionId).style.display = 'none';
@@ -54,13 +55,16 @@ document.getElementById('submit-btn').addEventListener('click', async (event) =>
     // Desabilita o botão imediatamente
     const submitBtn = event.target;
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...'; // Feedback visual
+    submitBtn.textContent = 'Enviando...';
 
-    // Pega a última resposta
+    // Garante que a última resposta (q3) seja capturada como r3
     const lastQuestionId = document.querySelector('.question-card[style="display: block;"]').id;
-    const lastQuestionKey = lastQuestionId.replace('question-', 'q');
-    const lastAnswer = document.querySelector(`input[name="${lastQuestionKey}"]:checked`).value;
-    respostas[lastQuestionKey] = lastAnswer;
+    const lastQuestionNumber = lastQuestionId.replace('question-', '');
+    const lastAnswer = document.querySelector(`input[name="q${lastQuestionNumber}"]:checked`).value;
+    respostas[`r${lastQuestionNumber}`] = lastAnswer;
+
+    // Verifica no console o que está sendo enviado
+    console.log("Respostas a serem enviadas:", respostas);
 
     try {
         const response = await fetch('http://localhost:8080/respostas', {
@@ -68,7 +72,11 @@ document.getElementById('submit-btn').addEventListener('click', async (event) =>
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(respostas)
+            body: JSON.stringify({
+                r1: respostas.r1,
+                r2: respostas.r2,
+                r3: respostas.r3
+            })
         });
 
         if (response.ok) {
